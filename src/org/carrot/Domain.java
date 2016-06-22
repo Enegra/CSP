@@ -1,4 +1,5 @@
-import java.lang.reflect.Array;
+package org.carrot;
+
 import java.util.ArrayList;
 
 /**
@@ -31,7 +32,11 @@ public class Domain {
         domain = states.get(states.size()-1).domain;
         states.remove(states.size()-1);
     }
-    
+
+    public void remove(int index){
+        addState();
+        domain.remove(index);
+    }
     //// TODO: 6/21/2016 wykreślanie z domeny 
 
 }
