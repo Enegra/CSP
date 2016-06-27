@@ -9,7 +9,7 @@ public class Solution {
     private Domain domain;
 
     public Solution(int size, Domain domain) {
-        variables = new Variable[size][size ];
+        variables = new Variable[size][size];
         this.domain = domain;
     }
 
@@ -40,7 +40,39 @@ public class Solution {
     }
 
     public Variable[][] getGrid(int rowNumber, int columnNumber){
-        return null;
+        int size = (int)Math.sqrt(variables.length);
+        int gridNumber = getGridNumber(rowNumber,columnNumber, size);
+        int xDeviation = (gridNumber % size) * size;
+        int yDeviation = (int) Math.floor(gridNumber / size) * size;
+        return calculateGrid(xDeviation, yDeviation, variables);
+    }
+
+    private Variable[][] calculateGrid(int xDeviation, int yDeviation, Variable[][] content) {
+        Variable[][] grid = new Variable[(int)Math.sqrt(content.length)][(int)Math.sqrt(content.length)];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                grid[i][j] = content[i + yDeviation][j + xDeviation];
+            }
+        }
+        return grid;
+    }
+
+    private int getGridNumber(int rowNumber, int columnNumber, int size) {
+        int xPosition = columnNumber / size;
+        int yPosition = rowNumber / size;
+        int gridNumber = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == yPosition && j == xPosition) {
+                    break;
+                }
+                gridNumber++;
+            }
+            if (i == yPosition) {
+                break;
+            }
+        }
+        return gridNumber;
     }
 
 }

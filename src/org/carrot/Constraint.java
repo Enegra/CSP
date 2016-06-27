@@ -5,28 +5,28 @@ package org.carrot;
  */
 public class Constraint {
 
-    public boolean rowContains(int row[], int number) {
-        for (int rowEntry : row) {
-            if (rowEntry == number) {
+    public boolean rowContains(Variable[] row, int number) {
+        for (Variable rowEntry : row) {
+            if (rowEntry.getValue() == number) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean columnContains(int[]column, int number) {
-        for (int columnEntry : column) {
-            if (columnEntry == number) {
+    public boolean columnContains(Variable[] column, int number) {
+        for (Variable columnEntry : column) {
+            if (columnEntry.getValue() == number) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean gridContains(int[][] grid, int number) {
-        for (int[] gridRow : grid) {
-            for (int rowEntry : gridRow) {
-                if (rowEntry == number) {
+    public boolean gridContains(Variable[][] grid, int number) {
+        for (Variable[] gridRow : grid) {
+            for (Variable rowEntry : gridRow) {
+                if (rowEntry.getValue() == number) {
                     return true;
                 }
             }
