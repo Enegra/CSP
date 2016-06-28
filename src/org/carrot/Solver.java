@@ -14,7 +14,7 @@ public class Solver {
     }
 
     public boolean backtrack(int rowNumber, int columnNumber){
-        if (constraintSatisfactionProblem.isSolved()){
+        if (isSolved()){
             return true;
         }
         if (!isUnsolvedVariable(rowNumber,columnNumber)){
@@ -36,7 +36,7 @@ public class Solver {
                 }
             }
             else {
-                if (constraintSatisfactionProblem.isSolved()){
+                if (isSolved()){
                     return true;
                 }
             }
@@ -67,6 +67,10 @@ public class Solver {
 
     private boolean isUnsolvedVariable(int rowNumber, int columnNumber){
         return constraintSatisfactionProblem.isUnsolvedVariable(rowNumber,columnNumber);
+    }
+
+    private boolean isSolved(){
+        return constraintSatisfactionProblem.isSolved();
     }
 
 }
