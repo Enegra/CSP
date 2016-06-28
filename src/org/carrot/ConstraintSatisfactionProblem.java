@@ -10,5 +10,5 @@ public abstract class ConstraintSatisfactionProblem {
     abstract boolean isSolved();
     abstract Domain getDomain();
     abstract Solution getSolution();
-    abstract boolean isUnsolvedVariable();
+    abstract boolean isUnsolvedVariable(int rowNumber, int columnNumber);
 }

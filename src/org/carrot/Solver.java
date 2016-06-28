@@ -5,11 +5,19 @@ package org.carrot;
  */
 public class Solver {
 
-    public boolean backtrack(ConstraintSatisfactionProblem constraintSatisfactionProblem){
+    private ConstraintSatisfactionProblem constraintSatisfactionProblem;
+
+    public Solver(ConstraintSatisfactionProblem constraintSatisfactionProblem){
+        this.constraintSatisfactionProblem = constraintSatisfactionProblem;
+    }
+
+    public boolean backtrack(int rowNumber, int columnNumber){
         if (constraintSatisfactionProblem.isSolved()){
             return true;
         }
-        //todo
+        if (!constraintSatisfactionProblem.isUnsolvedVariable(rowNumber,columnNumber)){
+
+        }
         return false;
     }
 

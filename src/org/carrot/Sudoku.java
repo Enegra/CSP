@@ -69,8 +69,8 @@ public class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    boolean isUnsolvedVariable() {
-        return false;
+    boolean isUnsolvedVariable(int rowNumber, int columnNumber) {
+        return solution.getVariables()[rowNumber][columnNumber].getValue()==0;
     }
 
 
