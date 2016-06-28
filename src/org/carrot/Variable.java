@@ -24,4 +24,9 @@ public class Variable {
         return domain;
     }
 
+    @Override
+    public String toString(){
+        return Integer.toString(value);
+    }
+
 }
