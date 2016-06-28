@@ -7,35 +7,35 @@ import java.util.ArrayList;
  */
 public class Domain {
 
-    private ArrayList<Integer> domain;
+    private ArrayList<Integer> values;
     private ArrayList<Domain> states;
 
     public Domain(ArrayList<Integer> values) {
-        domain = values;
+        this.values = values;
         states = new ArrayList<Domain>();
     }
 
     public Domain(ArrayList<Integer> values, ArrayList<Domain> states) {
-        domain = values;
+        this.values = values;
         this.states = states;
     }
 
-    public ArrayList<Integer> getDomain() {
-        return domain;
+    public ArrayList<Integer> getValues() {
+        return values;
     }
 
     private void addState() {
-        states.add(new Domain(domain,states));
+        states.add(new Domain(values,states));
     }
     
     public void revertState(){
-        domain = states.get(states.size()-1).domain;
+        values = states.get(states.size()-1).values;
         states.remove(states.size()-1);
     }
 
     public void remove(int index){
         addState();
-        domain.remove(index);
+        values.remove(index);
     }
     //// TODO: 6/21/2016 wykreślanie z domeny 
 
