@@ -6,15 +6,17 @@ package org.carrot;
 public class Solution {
 
     private Variable[][] variables;
-    private Domain domain;
 
     public Solution(int size, Domain domain) {
         variables = new Variable[size][size];
-        this.domain = domain;
+        for (int i=0; i<variables.length; i++){
+            for (int j=0; j<variables[i].length; j++){
+                variables[i][j] = new Variable(0, domain);
+            }
+        }
     }
 
     public Solution(int[][] partialSolution, Domain domain) {
-        this.domain = domain;
         variables = new Variable[partialSolution.length][partialSolution.length];
         for (int i=0; i<partialSolution.length; i++) {
             for (int j=0; j<partialSolution[i].length; j++){
