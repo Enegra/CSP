@@ -9,18 +9,17 @@ public class Sudoku extends ConstraintSatisfactionProblem {
 
     Constraint constraint;
     Solution solution;
-    Domain domain;
 
     public Sudoku(int size){
         constraint = new Constraint();
-        domain = createDomain(size);
-        solution = new Solution(size,domain);
+        solution = new Solution(size);
+        setInitialDomain(size);
     }
 
     public Sudoku(int[][] partialSolution){
         constraint = new Constraint();
-        domain = createDomain(partialSolution.length);
-        solution = new Solution(partialSolution,domain);
+        solution = new Solution(partialSolution);
+        setInitialDomain(partialSolution.length);
     }
 
     @Override
@@ -47,6 +46,16 @@ public class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
+    void setInitialDomain(int size){
+        Variable[][] variables = solution.getVariables();
+        for (int i=0; i<variables.length; i++){
+            for (int j=0; j<variables[i].length; j++){
+                variables[i][j].setDomain(createDomain(size));
+            }
+        }
+    }
+
+    @Override
     boolean isSolved() {
         for (int i=0; i<solution.getVariables().length; i++){
             for (int j=0; j<solution.getVariables()[i].length; j++){
@@ -56,11 +65,6 @@ public class Sudoku extends ConstraintSatisfactionProblem {
             }
         }
         return true;
-    }
-
-    @Override
-    public Domain getDomain(){
-        return domain;
     }
 
     @Override

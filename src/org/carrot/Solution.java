@@ -9,20 +9,20 @@ public class Solution {
 
     private Variable[][] variables;
 
-    public Solution(int size, Domain domain) {
+    public Solution(int size) {
         variables = new Variable[size][size];
         for (int i = 0; i < variables.length; i++) {
             for (int j = 0; j < variables[i].length; j++) {
-                variables[i][j] = new Variable(0, domain);
+                variables[i][j] = new Variable(0);
             }
         }
     }
 
-    public Solution(int[][] partialSolution, Domain domain) {
+    public Solution(int[][] partialSolution) {
         variables = new Variable[partialSolution.length][partialSolution.length];
         for (int i = 0; i < partialSolution.length; i++) {
             for (int j = 0; j < partialSolution[i].length; j++) {
-                variables[i][j] = new Variable(partialSolution[i][j], domain);
+                variables[i][j] = new Variable(partialSolution[i][j]);
             }
         }
     }

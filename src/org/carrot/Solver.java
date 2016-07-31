@@ -21,7 +21,7 @@ public class Solver {
             ArrayList<Integer> nextPosition = getNextPosition(rowNumber,columnNumber);
             return backtrack(nextPosition.get(0), nextPosition.get(1));
         }
-        for (int number : getDomain().getValues()){
+        for (int number : getDomain(rowNumber, columnNumber).getValues()){
             if (!satisfiesConstraints(rowNumber,columnNumber,number)){
                 continue;
             }
@@ -44,13 +44,13 @@ public class Solver {
         return false;
     }
     
-    public boolean checkForward(){
+    public boolean checkForward(int rowNumber, int columnNumber){
         if (isSolved()){
             return true;
         }
-        if (!getDomain().isEmpty()){
-            for (int number : getDomain().getValues()){
-                //// TODO: 7/31/2016  
+        if (!getDomain(rowNumber,columnNumber).isEmpty()){
+            for (int number : getDomain(rowNumber, columnNumber).getValues()){
+                //// TODO: 7/31/2016
             }
             return true;
         }
@@ -87,9 +87,9 @@ public class Solver {
     private boolean isSolved(){
         return constraintSatisfactionProblem.isSolved();
     }
-    
-    private Domain getDomain(){
-        return constraintSatisfactionProblem.getDomain();
+
+    private Domain getDomain(int rowNumber, int columnNumber){
+        return constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].getDomain();
     }
 
 }

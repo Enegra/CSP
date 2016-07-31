@@ -7,8 +7,8 @@ public abstract class ConstraintSatisfactionProblem {
 
     abstract boolean satisfiesConstraints(int rowNumber, int columnNumber, int number);
     abstract Domain createDomain(int size);
+    abstract void setInitialDomain(int size);
     abstract boolean isSolved();
-    abstract Domain getDomain();
     abstract Solution getSolution();
     abstract boolean isUnsolvedVariable(int rowNumber, int columnNumber);
 }

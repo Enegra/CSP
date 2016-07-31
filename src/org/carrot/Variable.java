@@ -12,16 +12,25 @@ public class Variable {
         this.domain = domain;
     }
 
-    public int getValue(){
+    public Variable(int value){
+        this.value = value;
+        this.domain = null;
+    }
+
+    int getValue(){
         return value;
     }
 
-    public void setValue(int value){
+    void setValue(int value){
         this.value = value;
     }
 
-    public Domain getDomain(){
+    Domain getDomain(){
         return domain;
+    }
+
+    void setDomain(Domain domain){
+        this.domain=domain;
     }
 
     @Override
