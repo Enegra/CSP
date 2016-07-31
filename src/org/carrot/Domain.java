@@ -37,6 +37,10 @@ public class Domain {
         addState();
         values.remove(index);
     }
+
+    public boolean isEmpty(){
+        return values.isEmpty();
+    }
     //// TODO: 6/21/2016 wykreślanie z domeny 
 
 }
