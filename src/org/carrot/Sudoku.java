@@ -77,5 +77,10 @@ public class Sudoku extends ConstraintSatisfactionProblem {
         return solution.getVariables()[rowNumber][columnNumber].getValue()==0;
     }
 
+    @Override
+    void limitDomain() {
+        //// TODO: 8/1/2016  
+    }
+
 
 }

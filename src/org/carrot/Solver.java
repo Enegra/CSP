@@ -50,13 +50,29 @@ public class Solver {
         }
         if (!getDomain(rowNumber,columnNumber).isEmpty()){
             for (int number : getDomain(rowNumber, columnNumber).getValues()){
-                //// TODO: 7/31/2016
+                if (!satisfiesConstraints(rowNumber,columnNumber,number)){
+                    continue;
+                }
+                setValue(rowNumber,columnNumber,number);
+                //// TODO: 8/1/2016 limit domain
+                ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
+                if (nextPosition!=null){
+                    if (backtrack(nextPosition.get(0), nextPosition.get(1))){
+                        return true;
+                    }
+                    else {
+                        setValue(rowNumber,columnNumber,0);
+                    }
+                }
+                else {
+                    if ((isSolved())){
+                        return true;
+                    }
+                }
+
             }
-            return true;
         }
-        else {
             return false;
-        }
     }
 
     public void solve(){
