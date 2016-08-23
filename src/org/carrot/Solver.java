@@ -5,107 +5,111 @@ import java.util.ArrayList;
 /**
  * Created by agnie on 6/27/2016.
  */
-public class Solver {
+class Solver {
 
     private ConstraintSatisfactionProblem constraintSatisfactionProblem;
 
-    public Solver(ConstraintSatisfactionProblem constraintSatisfactionProblem){
+    Solver(ConstraintSatisfactionProblem constraintSatisfactionProblem) {
         this.constraintSatisfactionProblem = constraintSatisfactionProblem;
     }
 
-    public boolean backtrack(int rowNumber, int columnNumber){
-        if (isSolved()){
+    boolean backtrack(int rowNumber, int columnNumber) {
+        if (isSolved()) {
             return true;
         }
-        if (!isUnsolvedVariable(rowNumber,columnNumber)){
-            ArrayList<Integer> nextPosition = getNextPosition(rowNumber,columnNumber);
+        if (!isUnsolvedVariable(rowNumber, columnNumber)) {
+            ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
             return backtrack(nextPosition.get(0), nextPosition.get(1));
         }
-        for (int number : getDomain(rowNumber, columnNumber).getValues()){
-            if (!satisfiesConstraints(rowNumber,columnNumber,number)){
+        for (int number : getDomain(rowNumber, columnNumber).getValues()) {
+            if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
                 continue;
             }
-            setValue(rowNumber,columnNumber,number);
+            setValue(rowNumber, columnNumber, number);
             ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
-            if (nextPosition!=null){
-                if (backtrack(nextPosition.get(0), nextPosition.get(1))){
+            if (nextPosition != null) {
+                if (backtrack(nextPosition.get(0), nextPosition.get(1))) {
                     return true;
+                } else {
+                    setValue(rowNumber, columnNumber, 0);
                 }
-                else {
-                    setValue(rowNumber,columnNumber,0);
-                }
-            }
-            else {
-                if (isSolved()){
+            } else {
+                if (isSolved()) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
-    public boolean checkForward(int rowNumber, int columnNumber){
-        if (isSolved()){
+
+    boolean checkForward(int rowNumber, int columnNumber) {
+        if (isSolved()) {
             return true;
         }
-        if (!getDomain(rowNumber,columnNumber).isEmpty()){
-            for (int number : getDomain(rowNumber, columnNumber).getValues()){
-                if (!satisfiesConstraints(rowNumber,columnNumber,number)){
+        if (!getDomain(rowNumber, columnNumber).isEmpty()) {
+            for (int number : getDomain(rowNumber, columnNumber).getValues()) {
+                if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
                     continue;
                 }
-                setValue(rowNumber,columnNumber,number);
-                //// TODO: 8/1/2016 limit domain
+                setValue(rowNumber, columnNumber, number);
+                limitDomain(number,rowNumber,columnNumber);
                 ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
-                if (nextPosition!=null){
-                    if (backtrack(nextPosition.get(0), nextPosition.get(1))){
+                if (nextPosition != null) {
+                    if (checkForward(nextPosition.get(0), nextPosition.get(1))) {
                         return true;
+                    } else {
+                        resetDomain(rowNumber, columnNumber);
+                        setValue(rowNumber, columnNumber, 0);
                     }
-                    else {
-                        setValue(rowNumber,columnNumber,0);
-                    }
-                }
-                else {
-                    if ((isSolved())){
+                } else {
+                    if ((isSolved())) {
                         return true;
                     }
                 }
 
             }
         }
-            return false;
+        return false;
     }
 
-    public void solve(){
-        if (backtrack(0,0)){
+    void solve() {
+        if (backtrack(0, 0)) {
             System.out.println("Problem solved");
-        }
-        else {
+        } else {
             System.out.println("No solution available");
         }
     }
 
-    private ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber){
-        return constraintSatisfactionProblem.getSolution().getNextPosition(rowNumber,columnNumber);
+    private ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
+        return constraintSatisfactionProblem.getSolution().getNextPosition(rowNumber, columnNumber);
     }
 
-    private void setValue(int rowNumber, int columnNumber, int value){
+    private void setValue(int rowNumber, int columnNumber, int value) {
         constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].setValue(value);
     }
 
-    private boolean satisfiesConstraints(int rowNumber, int columnNumber, int number){
-        return constraintSatisfactionProblem.satisfiesConstraints(rowNumber,columnNumber, number);
+    private boolean satisfiesConstraints(int rowNumber, int columnNumber, int number) {
+        return constraintSatisfactionProblem.satisfiesConstraints(rowNumber, columnNumber, number);
     }
 
-    private boolean isUnsolvedVariable(int rowNumber, int columnNumber){
-        return constraintSatisfactionProblem.isUnsolvedVariable(rowNumber,columnNumber);
+    private boolean isUnsolvedVariable(int rowNumber, int columnNumber) {
+        return constraintSatisfactionProblem.isUnsolvedVariable(rowNumber, columnNumber);
     }
 
-    private boolean isSolved(){
+    private boolean isSolved() {
         return constraintSatisfactionProblem.isSolved();
     }
 
-    private Domain getDomain(int rowNumber, int columnNumber){
+    private Domain getDomain(int rowNumber, int columnNumber) {
         return constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].getDomain();
+    }
+
+    private void limitDomain(int number, int rowNumber, int columnNumber){
+        constraintSatisfactionProblem.limitDomain(number,rowNumber,columnNumber);
+    }
+
+    private void resetDomain(int rowNumber, int columnNumber){
+        constraintSatisfactionProblem.resetDomain(rowNumber,columnNumber);
     }
 
 }
