@@ -3,9 +3,9 @@ package org.carrot;
 /**
  * Created by agnie on 6/21/2016.
  */
-public class Constraint {
+class Constraint {
 
-    public boolean rowContains(Variable[] row, int number) {
+    boolean rowContains(Variable[] row, int number) {
         for (Variable rowEntry : row) {
             if (rowEntry.getValue() == number) {
                 return true;
@@ -14,7 +14,7 @@ public class Constraint {
         return false;
     }
 
-    public boolean columnContains(Variable[] column, int number) {
+    boolean columnContains(Variable[] column, int number) {
         for (Variable columnEntry : column) {
             if (columnEntry.getValue() == number) {
                 return true;
@@ -23,7 +23,7 @@ public class Constraint {
         return false;
     }
 
-    public boolean gridContains(Variable[][] grid, int number) {
+    boolean gridContains(Variable[][] grid, int number) {
         for (Variable[] gridRow : grid) {
             for (Variable rowEntry : gridRow) {
                 if (rowEntry.getValue() == number) {

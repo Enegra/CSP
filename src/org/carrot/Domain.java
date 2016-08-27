@@ -5,42 +5,52 @@ import java.util.ArrayList;
 /**
  * Created by agnie on 6/21/2016.
  */
-public class Domain {
+class Domain {
 
     private ArrayList<Integer> values;
     private ArrayList<Domain> states;
 
-    public Domain(ArrayList<Integer> values) {
+    Domain(ArrayList<Integer> values) {
         this.values = values;
         states = new ArrayList<Domain>();
     }
 
-    public Domain(ArrayList<Integer> values, ArrayList<Domain> states) {
+    Domain(ArrayList<Integer> values, ArrayList<Domain> states) {
         this.values = values;
         this.states = states;
     }
 
-    public ArrayList<Integer> getValues() {
+    ArrayList<Integer> getValues() {
         return values;
     }
 
     private void addState() {
-        states.add(new Domain(values,states));
-    }
-    
-    public void revertState(){
-        values = states.get(states.size()-1).values;
-        states.remove(states.size()-1);
+        states.add(new Domain(values, states));
     }
 
-    public void remove(int index){
+    void revertState(int number) {
+        if (states.size()>0){
+            if (states.get(states.size()-1).values.contains(number)){
+                values = states.get(states.size() - 1).values;
+                states.remove(states.size() - 1);
+            }
+        }
+    }
+
+    void remove(int index) {
         addState();
         values.remove(index);
     }
 
-    public boolean isEmpty(){
+    void removeValue(int value) {
+       if (values.contains(value)){
+           addState();
+           values.remove(values.indexOf(value));
+       }
+    }
+
+    boolean isEmpty() {
         return values.isEmpty();
     }
-    //// TODO: 6/21/2016 wykreślanie z domeny 
 
 }

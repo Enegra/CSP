@@ -1,5 +1,7 @@
 package org.carrot;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import java.util.ArrayList;
 
 /**
@@ -33,7 +35,8 @@ class Solver {
                 } else {
                     setValue(rowNumber, columnNumber, 0);
                 }
-            } else {
+            }
+            else {
                 if (isSolved()) {
                     return true;
                 }
@@ -46,19 +49,32 @@ class Solver {
         if (isSolved()) {
             return true;
         }
+        if (!isUnsolvedVariable(rowNumber, columnNumber)) {
+            ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
+            return checkForward(nextPosition.get(0), nextPosition.get(1));
+        }
         if (!getDomain(rowNumber, columnNumber).isEmpty()) {
             for (int number : getDomain(rowNumber, columnNumber).getValues()) {
+                System.out.println(number);
                 if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
                     continue;
                 }
                 setValue(rowNumber, columnNumber, number);
                 limitDomain(number,rowNumber,columnNumber);
+                if (!constraintSatisfactionProblem.domainsValid()){
+                    resetDomain(number, rowNumber, columnNumber);
+                    System.out.println("NO PATH, BACKTRACKING");
+                    continue;
+                }
+                System.out.println("ROW " + rowNumber + " COLUMN " + columnNumber + " VALUE " + number);
                 ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
                 if (nextPosition != null) {
-                    if (checkForward(nextPosition.get(0), nextPosition.get(1))) {
+                    if (checkForward(nextPosition.get(0), nextPosition.get(1))){
                         return true;
-                    } else {
-                        resetDomain(rowNumber, columnNumber);
+                    }
+                    else {
+                        System.out.println("NO PATH, BACKTRACKING");
+                        resetDomain(number, rowNumber, columnNumber);
                         setValue(rowNumber, columnNumber, 0);
                     }
                 } else {
@@ -73,6 +89,7 @@ class Solver {
     }
 
     void solve() {
+        //    if (backtrack(0, 0)) {
         if (backtrack(0, 0)) {
             System.out.println("Problem solved");
         } else {
@@ -108,8 +125,8 @@ class Solver {
         constraintSatisfactionProblem.limitDomain(number,rowNumber,columnNumber);
     }
 
-    private void resetDomain(int rowNumber, int columnNumber){
-        constraintSatisfactionProblem.resetDomain(rowNumber,columnNumber);
+    private void resetDomain(int number, int rowNumber, int columnNumber){
+        constraintSatisfactionProblem.resetDomain(number, rowNumber,columnNumber);
     }
 
 }

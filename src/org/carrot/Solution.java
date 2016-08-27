@@ -5,11 +5,11 @@ import java.util.ArrayList;
 /**
  * Created by agnie on 6/21/2016.
  */
-public class Solution {
+class Solution {
 
     private Variable[][] variables;
 
-    public Solution(int size) {
+    Solution(int size) {
         variables = new Variable[size][size];
         for (int i = 0; i < variables.length; i++) {
             for (int j = 0; j < variables[i].length; j++) {
@@ -18,7 +18,7 @@ public class Solution {
         }
     }
 
-    public Solution(int[][] partialSolution) {
+    Solution(int[][] partialSolution) {
         variables = new Variable[partialSolution.length][partialSolution.length];
         for (int i = 0; i < partialSolution.length; i++) {
             for (int j = 0; j < partialSolution[i].length; j++) {
@@ -27,15 +27,15 @@ public class Solution {
         }
     }
 
-    public Variable[][] getVariables() {
+    Variable[][] getVariables() {
         return variables;
     }
 
-    public Variable[] getRow(int rowNumber) {
+    Variable[] getRow(int rowNumber) {
         return variables[rowNumber];
     }
 
-    public Variable[] getColumn(int columnNumber) {
+    Variable[] getColumn(int columnNumber) {
         Variable[] column = new Variable[variables.length];
         for (int i = 0; i < variables.length; i++) {
             column[i] = variables[i][columnNumber];
@@ -43,7 +43,7 @@ public class Solution {
         return column;
     }
 
-    public Variable[][] getGrid(int rowNumber, int columnNumber) {
+    Variable[][] getGrid(int rowNumber, int columnNumber) {
         int size = (int) Math.sqrt(variables.length);
         int gridNumber = getGridNumber(rowNumber, columnNumber, size);
         int xDeviation = (gridNumber % size) * size;
@@ -61,7 +61,7 @@ public class Solution {
         return grid;
     }
 
-    private int getGridNumber(int rowNumber, int columnNumber, int size) {
+    int getGridNumber(int rowNumber, int columnNumber, int size) {
         int xPosition = columnNumber / size;
         int yPosition = rowNumber / size;
         int gridNumber = 0;
@@ -79,7 +79,7 @@ public class Solution {
         return gridNumber;
     }
 
-    public ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
+    ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
         if (rowNumber == variables.length - 1 && columnNumber == variables.length - 1) {
             return null;
         }
@@ -87,10 +87,9 @@ public class Solution {
         if (columnNumber == variables.length - 1) {
             nextPosition.add(rowNumber + 1);
             nextPosition.add(0);
-        }
-        else {
+        } else {
             nextPosition.add(rowNumber);
-            nextPosition.add(columnNumber+1);
+            nextPosition.add(columnNumber + 1);
         }
         return nextPosition;
     }

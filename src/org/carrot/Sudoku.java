@@ -80,7 +80,6 @@ class Sudoku extends ConstraintSatisfactionProblem {
     @Override
     void limitDomain(int number, int rowNumber, int columnNumber) {
         //do that for every conflict
-        //// TODO: 8/18/2016 need to remove the issue of it going through the cells twice in some cases 
         for (int i = 0; i < solution.getVariables().length; i++) {
             if (isUnsolvedVariable(i, columnNumber)) {
                 solution.getVariables()[i][columnNumber].getDomain().removeValue(number);
@@ -91,7 +90,6 @@ class Sudoku extends ConstraintSatisfactionProblem {
                 solution.getVariables()[rowNumber][i].getDomain().removeValue(number);
             }
         }
-        //how do I do it for grid QQ
         int gridSize = (int) Math.sqrt(solution.getVariables().length);
         int gridNumber = solution.getGridNumber(rowNumber,columnNumber,gridSize);
         int xDeviation = (gridNumber % gridSize) * gridSize;
@@ -99,11 +97,54 @@ class Sudoku extends ConstraintSatisfactionProblem {
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (isUnsolvedVariable(i+yDeviation, j+xDeviation)){
+                    if (i+yDeviation==rowNumber || j+xDeviation==columnNumber){
+                        continue;
+                    }
                     solution.getVariables()[i+yDeviation][j+xDeviation].getDomain().removeValue(number);
                 }
             }
         }
-//        solution.getVariables()[rowNumber][columnNumber].getDomain().removeValue(number);
+    }
+
+    @Override
+    void resetDomain(int number, int rowNumber, int columnNumber) {
+        for (int i = 0; i < solution.getVariables().length; i++) {
+            if (isUnsolvedVariable(i, columnNumber)) {
+                solution.getVariables()[i][columnNumber].getDomain().revertState(number);
+            }
+        }
+        for (int i = 0; i < solution.getVariables()[rowNumber].length; i++) {
+            if (isUnsolvedVariable(rowNumber, i)) {
+                solution.getVariables()[i][columnNumber].getDomain().revertState(number);
+            }
+        }
+        int gridSize = (int) Math.sqrt(solution.getVariables().length);
+        int gridNumber = solution.getGridNumber(rowNumber,columnNumber,gridSize);
+        int xDeviation = (gridNumber % gridSize) * gridSize;
+        int yDeviation = (int) Math.floor(gridNumber / gridSize) * gridSize;
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if (isUnsolvedVariable(i+yDeviation, j+xDeviation)){
+                    if (i+yDeviation==rowNumber || j+xDeviation==columnNumber){
+                        continue;
+                    }
+                    solution.getVariables()[i][columnNumber].getDomain().revertState(number);
+                }
+            }
+        }
+    }
+
+    @Override
+    boolean domainsValid() {
+        Variable[][] variables = solution.getVariables();
+        for (Variable[] variableRow : variables){
+            for (Variable variable : variableRow){
+                if (variable.getDomain().isEmpty()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
