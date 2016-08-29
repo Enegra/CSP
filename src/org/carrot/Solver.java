@@ -54,6 +54,7 @@ class Solver {
             return checkForward(nextPosition.get(0), nextPosition.get(1));
         }
         if (!getDomain(rowNumber, columnNumber).isEmpty()) {
+            System.out.println(getDomain(rowNumber, columnNumber).getValues().toString());
             for (int number : getDomain(rowNumber, columnNumber).getValues()) {
                 System.out.println(number);
                 if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
@@ -76,6 +77,7 @@ class Solver {
                         System.out.println("NO PATH, BACKTRACKING");
                         resetDomain(number, rowNumber, columnNumber);
                         setValue(rowNumber, columnNumber, 0);
+                        System.out.println(getDomain(rowNumber, columnNumber).getValues().toString());
                     }
                 } else {
                     if ((isSolved())) {
@@ -90,7 +92,7 @@ class Solver {
 
     void solve() {
         //    if (backtrack(0, 0)) {
-        if (backtrack(0, 0)) {
+        if (checkForward(0, 0)) {
             System.out.println("Problem solved");
         } else {
             System.out.println("No solution available");
