@@ -80,12 +80,12 @@ class Sudoku extends ConstraintSatisfactionProblem {
     @Override
     void limitDomain(int number, int rowNumber, int columnNumber) {
         //do that for every conflict
-        for (int i = 0; i < solution.getVariables().length; i++) {
+        for (int i = rowNumber+1; i < solution.getVariables().length; i++) {
             if (isUnsolvedVariable(i, columnNumber)) {
                 solution.getVariables()[i][columnNumber].getDomain().removeValue(number);
             }
         }
-        for (int i = 0; i < solution.getVariables()[rowNumber].length; i++) {
+        for (int i = columnNumber+1; i < solution.getVariables()[rowNumber].length; i++) {
             if (isUnsolvedVariable(rowNumber, i)) {
                 solution.getVariables()[rowNumber][i].getDomain().removeValue(number);
             }
@@ -97,7 +97,7 @@ class Sudoku extends ConstraintSatisfactionProblem {
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (isUnsolvedVariable(i+yDeviation, j+xDeviation)){
-                    if (i+yDeviation==rowNumber || j+xDeviation==columnNumber){
+                    if (i+yDeviation<=rowNumber || j+xDeviation<=columnNumber){
                         continue;
                     }
                     solution.getVariables()[i+yDeviation][j+xDeviation].getDomain().removeValue(number);
@@ -107,16 +107,16 @@ class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void resetDomain(int number, int rowNumber, int columnNumber) {
-        for (int i = 0; i < solution.getVariables().length; i++) {
-            if (isUnsolvedVariable(i, columnNumber)) {
-                solution.getVariables()[i][columnNumber].getDomain().revertState(number);
-            }
+    void resetDomain(int rowNumber, int columnNumber) {
+        for (int i = rowNumber+1; i < solution.getVariables().length; i++) {
+//            if (isUnsolvedVariable(i, columnNumber)) {
+                solution.getVariables()[i][columnNumber].getDomain().revertState();
+//            }
         }
-        for (int i = 0; i < solution.getVariables()[rowNumber].length; i++) {
-            if (isUnsolvedVariable(rowNumber, i)) {
-                solution.getVariables()[i][columnNumber].getDomain().revertState(number);
-            }
+        for (int i = columnNumber+1; i < solution.getVariables()[rowNumber].length; i++) {
+//            if (isUnsolvedVariable(rowNumber, i)) {
+                solution.getVariables()[rowNumber][i].getDomain().revertState();
+//            }
         }
         int gridSize = (int) Math.sqrt(solution.getVariables().length);
         int gridNumber = solution.getGridNumber(rowNumber,columnNumber,gridSize);
@@ -124,12 +124,12 @@ class Sudoku extends ConstraintSatisfactionProblem {
         int yDeviation = (int) Math.floor(gridNumber / gridSize) * gridSize;
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                if (isUnsolvedVariable(i+yDeviation, j+xDeviation)){
-                    if (i+yDeviation==rowNumber || j+xDeviation==columnNumber){
+//                if (isUnsolvedVariable(i+yDeviation, j+xDeviation)){
+                    if (i+yDeviation<=rowNumber || j+xDeviation<=columnNumber){
                         continue;
                     }
-                    solution.getVariables()[i][columnNumber].getDomain().revertState(number);
-                }
+                    solution.getVariables()[i+yDeviation][j+xDeviation].getDomain().revertState();
+//                }
             }
         }
     }

@@ -1,8 +1,7 @@
 package org.carrot;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by agnie on 6/27/2016.
@@ -19,8 +18,8 @@ class Solver {
         if (isSolved()) {
             return true;
         }
+        ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
         if (!isUnsolvedVariable(rowNumber, columnNumber)) {
-            ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
             return backtrack(nextPosition.get(0), nextPosition.get(1));
         }
         for (int number : getDomain(rowNumber, columnNumber).getValues()) {
@@ -28,15 +27,13 @@ class Solver {
                 continue;
             }
             setValue(rowNumber, columnNumber, number);
-            ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
             if (nextPosition != null) {
                 if (backtrack(nextPosition.get(0), nextPosition.get(1))) {
                     return true;
                 } else {
                     setValue(rowNumber, columnNumber, 0);
                 }
-            }
-            else {
+            } else {
                 if (isSolved()) {
                     return true;
                 }
@@ -49,46 +46,41 @@ class Solver {
         if (isSolved()) {
             return true;
         }
+        ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
         if (!isUnsolvedVariable(rowNumber, columnNumber)) {
-            ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
             return checkForward(nextPosition.get(0), nextPosition.get(1));
         }
         if (!getDomain(rowNumber, columnNumber).isEmpty()) {
-            System.out.println(getDomain(rowNumber, columnNumber).getValues().toString());
-            for (int number : getDomain(rowNumber, columnNumber).getValues()) {
-                System.out.println(number);
+            ArrayList<Integer> domain = getDomain(rowNumber, columnNumber).getValues();
+            System.out.println(domain.toString());
+            for (int number : domain) {
                 if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
                     continue;
                 }
                 setValue(rowNumber, columnNumber, number);
-                limitDomain(number,rowNumber,columnNumber);
-                if (!constraintSatisfactionProblem.domainsValid()){
-                    resetDomain(number, rowNumber, columnNumber);
-                    System.out.println("NO PATH, BACKTRACKING");
+                limitDomain(number, rowNumber, columnNumber);
+                if (!constraintSatisfactionProblem.domainsValid()) {
+                    setValue(rowNumber, columnNumber, 0);
+                    resetDomain(rowNumber, columnNumber);
                     continue;
                 }
-                System.out.println("ROW " + rowNumber + " COLUMN " + columnNumber + " VALUE " + number);
-                ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
                 if (nextPosition != null) {
-                    if (checkForward(nextPosition.get(0), nextPosition.get(1))){
+                    if (checkForward(nextPosition.get(0), nextPosition.get(1))) {
                         return true;
-                    }
-                    else {
-                        System.out.println("NO PATH, BACKTRACKING");
-                        resetDomain(number, rowNumber, columnNumber);
+                    } else {
                         setValue(rowNumber, columnNumber, 0);
-                        System.out.println(getDomain(rowNumber, columnNumber).getValues().toString());
+                        resetDomain(rowNumber, columnNumber);
                     }
                 } else {
                     if ((isSolved())) {
                         return true;
                     }
                 }
-
             }
         }
-        return false;
-    }
+    return false;
+}
+
 
     void solve() {
         //    if (backtrack(0, 0)) {
@@ -123,12 +115,16 @@ class Solver {
         return constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].getDomain();
     }
 
-    private void limitDomain(int number, int rowNumber, int columnNumber){
-        constraintSatisfactionProblem.limitDomain(number,rowNumber,columnNumber);
+    private void limitDomain(int number, int rowNumber, int columnNumber) {
+        constraintSatisfactionProblem.limitDomain(number, rowNumber, columnNumber);
     }
 
-    private void resetDomain(int number, int rowNumber, int columnNumber){
-        constraintSatisfactionProblem.resetDomain(number, rowNumber,columnNumber);
+    private void resetDomain(int rowNumber, int columnNumber) {
+        constraintSatisfactionProblem.resetDomain(rowNumber, columnNumber);
+    }
+
+    private void limitCurrentDomain(int number, int rowNumber, int columnNumber) {
+        constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].getDomain().removeValue(number);
     }
 
 }

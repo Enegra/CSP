@@ -19,7 +19,7 @@ public abstract class ConstraintSatisfactionProblem {
 
     abstract void limitDomain(int number, int rowNumber, int columnNumber);
 
-    abstract void resetDomain(int number, int rowNumber, int columnNumber);
+    abstract void resetDomain(int rowNumber, int columnNumber);
 
     abstract boolean domainsValid();
 }

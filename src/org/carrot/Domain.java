@@ -25,16 +25,17 @@ class Domain {
     }
 
     private void addState() {
-        states.add(new Domain(values, states));
+        ArrayList<Integer> oldValues = (ArrayList<Integer>)values.clone();
+        states.add(new Domain(oldValues, states));
     }
 
-    void revertState(int number) {
+    void revertState() {
         if (states.size()>0){
-            if (states.get(states.size()-1).values.contains(number)){
+            System.out.println("CURRENT VALUES: " + values.toString());
                 values = states.get(states.size() - 1).values;
+            System.out.println("OLD VALUES: " + values.toString());
                 states.remove(states.size() - 1);
             }
-        }
     }
 
     void remove(int index) {
@@ -51,6 +52,10 @@ class Domain {
 
     boolean isEmpty() {
         return values.isEmpty();
+    }
+
+    void setValues(ArrayList<Integer> values){
+        this.values = values;
     }
 
 }
