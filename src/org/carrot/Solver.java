@@ -83,8 +83,8 @@ class Solver {
 
 
     void solve() {
-        //    if (backtrack(0, 0)) {
-        if (checkForward(0, 0)) {
+        //    if (checkForward(0, 0)) {
+        if (backtrack(0, 0)) {
             System.out.println("Problem solved");
         } else {
             System.out.println("No solution available");
