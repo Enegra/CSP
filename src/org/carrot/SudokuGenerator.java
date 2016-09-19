@@ -43,7 +43,7 @@ public class SudokuGenerator {
         return sample;
     }
 
-    int[][] permutate(int[][] array){
+    private int[][] permutate(int[][] array){
         Random random = new Random();
         int size = array.length;
         int gridSize = (int)Math.sqrt(array.length);
@@ -67,7 +67,7 @@ public class SudokuGenerator {
         return array;
     }
 
-    void swapNumbers(int numberOne, int numberTwo, int[][] array){
+    private void swapNumbers(int numberOne, int numberTwo, int[][] array){
         ArrayList<ArrayList<Integer>> positionsOne = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> positionsTwo = new ArrayList<ArrayList<Integer>>();
         for (int i=0; i<array.length; i++){
@@ -89,7 +89,7 @@ public class SudokuGenerator {
         }
     }
 
-    void swapRow(int rowOne, int rowTwo, int[][] array){
+    private void swapRow(int rowOne, int rowTwo, int[][] array){
         int size = (int)Math.sqrt(array.length);
         for (int i=0; i<size; i++){
             int[] temp = array[rowOne*size+i];
@@ -98,7 +98,7 @@ public class SudokuGenerator {
         }
     }
 
-    void swapColumn(int columnOne, int columnTwo, int[][] array){
+    private void swapColumn(int columnOne, int columnTwo, int[][] array){
         int size = (int)Math.sqrt(array.length);
         for (int i=0; i<size; i++){
             for (int j=0; j<array.length; j++){

@@ -1,7 +1,6 @@
 package org.carrot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by agnie on 6/27/2016.
@@ -14,7 +13,7 @@ class Solver {
         this.constraintSatisfactionProblem = constraintSatisfactionProblem;
     }
 
-    boolean backtrack(int rowNumber, int columnNumber) {
+    private boolean backtrack(int rowNumber, int columnNumber) {
         if (isSolved()) {
             return true;
         }
@@ -42,7 +41,7 @@ class Solver {
         return false;
     }
 
-    boolean checkForward(int rowNumber, int columnNumber) {
+    private boolean checkForward(int rowNumber, int columnNumber) {
         if (isSolved()) {
             return true;
         }
