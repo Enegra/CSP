@@ -11,6 +11,8 @@ class UserInterface extends JFrame {
     private BoardPanel boardPanel;
     private int optionPanelWidth=200;
     private int optionPanelHeight=300;
+    private int[][] boardArray;
+    private int[][] solvedPuzzle;
 
     UserInterface(){
         prepareGUI();
@@ -18,7 +20,7 @@ class UserInterface extends JFrame {
 
     private void prepareGUI(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(optionPanelWidth + 10, optionPanelHeight+20);
+        this.setSize(optionPanelWidth + 25, optionPanelHeight+20);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setTitle("CSP");
@@ -28,7 +30,28 @@ class UserInterface extends JFrame {
         this.setVisible(true);
     }
 
-    public void displayPuzzle(int[][] array){
+    void generateRandomSudokuPuzzle(int size){
+        SudokuGenerator sudokuGenerator = new SudokuGenerator();
+        boardArray = sudokuGenerator.generate(size);
+        displayPuzzle(boardArray);
+    }
+
+    void solveSudokuPuzzle(){
+        Sudoku sudoku = new Sudoku(boardArray);
+        Solver solver = new Solver(sudoku);
+        solver.solve();
+        solvedPuzzle = new int[boardArray.length][boardArray.length];
+        Variable[][] variables = sudoku.getSolution().getVariables();
+        for (int i=0; i<variables.length; i++){
+            for (int j=0; j<variables[i].length; j++){
+                solvedPuzzle[i][j] = variables[i][j].getValue();
+            }
+        }
+        displayPuzzle(solvedPuzzle);
+        boardPanel.revalidate();
+    }
+
+    private void displayPuzzle(int[][] array){
         boardPanel = new BoardPanel();
         boardPanel.drawSudoku(array);
         int boardSize = boardPanel.getCanvasSize();

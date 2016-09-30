@@ -30,6 +30,7 @@ class OptionPanel extends JPanel {
         setupProblemSizeLabel();
         setupProblemSizeComboBox();
         setupSetupButton();
+        setupSolveButton();
         this.setVisible(true);
     }
 
@@ -102,14 +103,28 @@ class OptionPanel extends JPanel {
                 int problemSize = (Integer) problemSizeComboBox.getSelectedItem();
                 int heuristic = heuristicChoiceComboBox.getSelectedIndex();
                 //function to run selected algorithm with chosen values
+                userInterface.generateRandomSudokuPuzzle(problemSize);
+                solveButton.setVisible(true);
             }
         });
         this.add(setupButton);
+        setupButton.setPreferredSize(new Dimension(200,30));
         setupButton.setVisible(false);
     }
 
     private void setupSolveButton(){
         solveButton = new JButton("SOLVE");
+        solveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource()==solveButton){
+                    userInterface.solveSudokuPuzzle();
+                }
+            }
+        });
+        this.add(solveButton);
+        solveButton.setPreferredSize(new Dimension(200,30));
+        solveButton.setVisible(false);
     }
 
 

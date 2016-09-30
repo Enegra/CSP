@@ -56,17 +56,19 @@ class Solver {
                 if (!satisfiesConstraints(rowNumber, columnNumber, number)) {
                     continue;
                 }
+                System.out.println("ROW " + rowNumber + " COLUMN " + columnNumber + " NUMBER " + number);
                 setValue(rowNumber, columnNumber, number);
                 limitDomain(number, rowNumber, columnNumber);
-                if (!constraintSatisfactionProblem.domainsValid()) {
-                    setValue(rowNumber, columnNumber, 0);
-                    resetDomain(rowNumber, columnNumber);
-                    continue;
-                }
+//                if (!constraintSatisfactionProblem.domainsValid()) {
+//                    setValue(rowNumber, columnNumber, 0);
+//                    resetDomain(rowNumber, columnNumber);
+//                    continue;
+//                }
                 if (nextPosition != null) {
                     if (checkForward(nextPosition.get(0), nextPosition.get(1))) {
                         return true;
                     } else {
+                        System.out.println("ROW " + rowNumber + " COLUMN " + columnNumber + " FAILED");
                         setValue(rowNumber, columnNumber, 0);
                         resetDomain(rowNumber, columnNumber);
                     }
@@ -82,8 +84,8 @@ class Solver {
 
 
     void solve() {
-        //    if (checkForward(0, 0)) {
-        if (backtrack(0, 0)) {
+            if (checkForward(0, 0)) {
+//        if (backtrack(0, 0)) {
             System.out.println("Problem solved");
         } else {
             System.out.println("No solution available");
@@ -122,8 +124,5 @@ class Solver {
         constraintSatisfactionProblem.resetDomain(rowNumber, columnNumber);
     }
 
-    private void limitCurrentDomain(int number, int rowNumber, int columnNumber) {
-        constraintSatisfactionProblem.getSolution().getVariables()[rowNumber][columnNumber].getDomain().removeValue(number);
-    }
 
 }

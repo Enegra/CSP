@@ -34,4 +34,44 @@ class Constraint {
         return false;
     }
 
+    boolean diagonalContains(Variable[][] variables, int number, int row, int column){
+        int currentRow = row;
+        int currentColumn = column;
+        while (currentRow<variables.length-1 && currentColumn<variables.length-1){
+                ++currentRow;
+                ++currentColumn;
+                if (variables[currentRow][currentColumn].getValue()==number){
+                    return true;
+                }
+        }
+        currentRow = row;
+        currentColumn = column;
+        while (currentRow>0 && currentColumn>0){
+            --currentRow;
+            --currentColumn;
+            if (variables[currentRow][currentColumn].getValue()==number){
+                return true;
+            }
+        }
+        currentRow = row;
+        currentColumn = column;
+        while (currentRow<variables.length-1 && currentColumn>0){
+            ++currentRow;
+            --currentColumn;
+            if (variables[currentRow][currentColumn].getValue()==number){
+                return true;
+            }
+        }
+        currentRow = row;
+        currentColumn = column;
+        while (currentRow>0 && currentColumn<variables.length-1){
+            --currentRow;
+            ++currentColumn;
+            if (variables[currentRow][currentColumn].getValue()==number){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -49,8 +49,8 @@ public class SudokuGenerator {
         int gridSize = (int)Math.sqrt(array.length);
         int numberOfSwaps = random.nextInt(size*size);
         for (int i=0; i<numberOfSwaps; i++){
-            int numberOne = random.nextInt(9)+1;
-            int numberTwo = random.nextInt(9)+1;
+            int numberOne = random.nextInt(size)+1;
+            int numberTwo = random.nextInt(size)+1;
             swapNumbers(numberOne, numberTwo, array);
         }
         System.out.println(Arrays.deepToString(array));

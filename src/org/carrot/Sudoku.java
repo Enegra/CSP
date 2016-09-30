@@ -38,11 +38,11 @@ class Sudoku extends ConstraintSatisfactionProblem {
 
     @Override
     Domain createDomain(int size) {
-        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        ArrayList<Integer> domain = new ArrayList<Integer>();
         for (int i = 1; i < size + 1; i++) {
-            numbers.add(i);
+            domain.add(i);
         }
-        return new Domain(numbers);
+        return new Domain(domain);
     }
 
     @Override
