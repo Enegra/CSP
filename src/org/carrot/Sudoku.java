@@ -7,19 +7,22 @@ import java.util.ArrayList;
  */
 class Sudoku extends ConstraintSatisfactionProblem {
 
-    Constraint constraint;
-    Solution solution;
+    private Constraint constraint;
+    private Solution solution;
+    private boolean domainHeuristic;
 
     Sudoku(int size) {
         constraint = new Constraint();
         solution = new Solution(size);
         setInitialDomain(size);
+        domainHeuristic = false;
     }
 
     Sudoku(int[][] partialSolution) {
         constraint = new Constraint();
         solution = new Solution(partialSolution);
         setInitialDomain(partialSolution.length);
+        domainHeuristic = false;
     }
 
     @Override
@@ -34,6 +37,23 @@ class Sudoku extends ConstraintSatisfactionProblem {
             return false;
         }
         return true;
+    }
+
+    @Override
+    ArrayList<Integer> getDomain(int rowNumber, int columnNumber) {
+        ArrayList<Integer> domain = solution.getVariables()[rowNumber][columnNumber].getDomain().getValues();
+        if (domainHeuristic){
+            int[][] values = solution.getValues();
+            int[] numbers = Utils.sortByOccurrence(values);
+            ArrayList<Integer> allowedNumbers = new ArrayList<Integer>();
+            for (int number : numbers){
+                if (domain.contains(number)){
+                    allowedNumbers.add(number);
+                }
+            }
+            domain = allowedNumbers;
+        }
+        return domain;
     }
 
     @Override
@@ -145,6 +165,16 @@ class Sudoku extends ConstraintSatisfactionProblem {
             }
         }
         return true;
+    }
+
+    @Override
+    void setDomainHeuristic() {
+        domainHeuristic = true;
+    }
+
+    @Override
+    void setVariableHeuristic() {
+
     }
 
 

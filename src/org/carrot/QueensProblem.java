@@ -1,14 +1,17 @@
 package org.carrot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by agnie on 9/22/2016.
  */
 public class QueensProblem extends ConstraintSatisfactionProblem {
 
-    Constraint constraint;
-    Solution solution;
+    private Constraint constraint;
+    private Solution solution;
+    private boolean domainHeuristic;
+    private boolean variableHeuristic;
 
     QueensProblem(int size){
         constraint = new Constraint();
@@ -37,6 +40,20 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
         }
 
         return true;
+    }
+
+    @Override
+    ArrayList<Integer> getDomain(int rowNumber, int columnNumber) {
+        ArrayList<Integer> domain = solution.getVariables()[rowNumber][columnNumber].getDomain().getValues();
+        if (domainHeuristic){
+            //todo
+            int[][] values = solution.getValues();
+            int[] occurences = Utils.getOccurrences(values);
+            if (occurences[0]/values.length > 0.75){
+                Collections.swap(domain,0,1);
+            }
+        }
+        return domain;
     }
 
     @Override
@@ -88,10 +105,10 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
     void limitDomain(int number, int rowNumber, int columnNumber) {
         if (number==1){
             Variable[][] variables = solution.getVariables();
-            for (int i = 0; i < variables.length; i++) {
+            for (int i = rowNumber+1; i < variables.length; i++) {
                 variables[i][columnNumber].getDomain().removeValue(number);
             }
-            for (int i = 0; i < variables[rowNumber].length; i++) {
+            for (int i = columnNumber+1; i < variables[rowNumber].length; i++) {
                 variables[rowNumber][i].getDomain().removeValue(number);
             }
             int currentRow = rowNumber;
@@ -101,13 +118,13 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
                 ++currentColumn;
                 variables[currentRow][currentColumn].getDomain().removeValue(number);
             }
-            currentRow = rowNumber;
-            currentColumn = columnNumber;
-            while (currentRow>0 && currentColumn>0){
-                --currentRow;
-                --currentColumn;
-                variables[currentRow][currentColumn].getDomain().removeValue(number);
-            }
+//            currentRow = rowNumber;
+//            currentColumn = columnNumber;
+//            while (currentRow>0 && currentColumn>0){
+//                --currentRow;
+//                --currentColumn;
+//                variables[currentRow][currentColumn].getDomain().removeValue(number);
+//            }
             currentRow = rowNumber;
             currentColumn = columnNumber;
             while (currentRow<variables.length-1 && currentColumn>0){
@@ -115,23 +132,23 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
                 --currentColumn;
                 variables[currentRow][currentColumn].getDomain().removeValue(number);
             }
-            currentRow = rowNumber;
-            currentColumn = columnNumber;
-            while (currentRow>0 && currentColumn<variables.length-1){
-                --currentRow;
-                ++currentColumn;
-                variables[currentRow][currentColumn].getDomain().removeValue(number);
-            }
+//            currentRow = rowNumber;
+//            currentColumn = columnNumber;
+//            while (currentRow>0 && currentColumn<variables.length-1){
+//                --currentRow;
+//                ++currentColumn;
+//                variables[currentRow][currentColumn].getDomain().removeValue(number);
+//            }
         }
     }
 
     @Override
     void resetDomain(int rowNumber, int columnNumber) {
         Variable[][] variables = solution.getVariables();
-        for (int i = 0; i < variables.length; i++) {
+        for (int i = rowNumber+1; i < variables.length; i++) {
             variables[i][columnNumber].getDomain().revertState();
         }
-        for (int i = 0; i < variables[rowNumber].length; i++) {
+        for (int i = columnNumber+1; i < variables[rowNumber].length; i++) {
             variables[rowNumber][i].getDomain().revertState();
         }
         int currentRow = rowNumber;
@@ -141,13 +158,13 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
             ++currentColumn;
             variables[currentRow][currentColumn].getDomain().revertState();
         }
-        currentRow = rowNumber;
-        currentColumn = columnNumber;
-        while (currentRow>0 && currentColumn>0){
-            --currentRow;
-            --currentColumn;
-            variables[currentRow][currentColumn].getDomain().revertState();
-        }
+//        currentRow = rowNumber;
+//        currentColumn = columnNumber;
+//        while (currentRow>0 && currentColumn>0){
+//            --currentRow;
+//            --currentColumn;
+//            variables[currentRow][currentColumn].getDomain().revertState();
+//        }
         currentRow = rowNumber;
         currentColumn = columnNumber;
         while (currentRow<variables.length-1 && currentColumn>0){
@@ -155,13 +172,13 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
             --currentColumn;
             variables[currentRow][currentColumn].getDomain().revertState();
         }
-        currentRow = rowNumber;
-        currentColumn = columnNumber;
-        while (currentRow>0 && currentColumn<variables.length-1){
-            --currentRow;
-            ++currentColumn;
-            variables[currentRow][currentColumn].getDomain().revertState();
-        }
+//        currentRow = rowNumber;
+//        currentColumn = columnNumber;
+//        while (currentRow>0 && currentColumn<variables.length-1){
+//            --currentRow;
+//            ++currentColumn;
+//            variables[currentRow][currentColumn].getDomain().revertState();
+//        }
     }
 
     @Override
@@ -180,5 +197,15 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
             }
         }
         return eachRowContains;
+    }
+
+    @Override
+    void setDomainHeuristic() {
+        domainHeuristic=true;
+    }
+
+    @Override
+    void setVariableHeuristic() {
+
     }
 }

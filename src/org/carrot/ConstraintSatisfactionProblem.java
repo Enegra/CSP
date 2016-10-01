@@ -1,11 +1,15 @@
 package org.carrot;
 
+import java.util.ArrayList;
+
 /**
  * Created by agnie on 6/22/2016.
  */
 public abstract class ConstraintSatisfactionProblem {
 
     abstract boolean satisfiesConstraints(int rowNumber, int columnNumber, int number);
+
+    abstract ArrayList<Integer> getDomain(int rowNumber, int columnNumber);
 
     abstract Domain createDomain(int size);
 
@@ -22,4 +26,8 @@ public abstract class ConstraintSatisfactionProblem {
     abstract void resetDomain(int rowNumber, int columnNumber);
 
     abstract boolean domainsValid();
+
+    abstract void setDomainHeuristic();
+
+    abstract void setVariableHeuristic();
 }

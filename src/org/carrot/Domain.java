@@ -31,9 +31,7 @@ class Domain {
 
     void revertState() {
         if (states.size()>0){
-            System.out.println("CURRENT VALUES: " + values.toString());
                 values = states.get(states.size() - 1).values;
-            System.out.println("OLD VALUES: " + values.toString());
                 states.remove(states.size() - 1);
             }
     }

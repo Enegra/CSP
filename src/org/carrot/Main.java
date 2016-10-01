@@ -11,6 +11,7 @@ public class Main {
 //        int[][] matrix3 = sudokuGenerator.generate(2);
 //        System.out.println(Arrays.deepToString(matrix3));
 //        Sudoku sudoku = new Sudoku(matrix3);
+//        sudoku.setDomainHeuristic();
 //        Solver solver = new Solver(sudoku);
 //        solver.solve();
 //        System.out.println(Arrays.deepToString(sudoku.getSolution().getVariables()));
@@ -18,8 +19,9 @@ public class Main {
 //        UserInterface userInterface = new UserInterface();
 //        userInterface.displayPuzzle(matrix3);
 
-        int[][] matrix = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-        QueensProblem queensProblem = new QueensProblem(matrix);
+//        int[][] matrix = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+        QueensProblem queensProblem = new QueensProblem(8);
+        queensProblem.setDomainHeuristic();
         System.out.println(Arrays.deepToString(queensProblem.getSolution().getVariables()));
         Solver solver = new Solver(queensProblem);
         solver.solve();
