@@ -79,15 +79,11 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
         int queenCount=0;
         for (int i = 0; i < solution.getVariables().length; i++) {
             for (int j = 0; j < solution.getVariables()[i].length; j++) {
-//                if (solution.getVariables()[i][j].getValue() == 0) {
-//                    return false;
-//                }
                 if (solution.getVariables()[i][j].getValue() == 1){
                     queenCount++;
                 }
             }
         }
-//        return true;
         return queenCount==solution.getVariables().length;
     }
 
@@ -205,7 +201,27 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void setVariableHeuristic() {
+    boolean checkDomainHeuristic() {
+        return false;
+    }
 
+    @Override
+    void setVariableHeuristic() {
+        variableHeuristic=true;
+    }
+
+    @Override
+    boolean checkVariableHeuristic() {
+        return false;
+    }
+
+    @Override
+    ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
+        return null;
+    }
+
+    @Override
+    ArrayList<ArrayList<Integer>> getAccessPoints() {
+        return null;
     }
 }

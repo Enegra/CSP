@@ -1,6 +1,7 @@
 package org.carrot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by agnie on 6/27/2016.
@@ -10,6 +11,9 @@ class Sudoku extends ConstraintSatisfactionProblem {
     private Constraint constraint;
     private Solution solution;
     private boolean domainHeuristic;
+    private boolean variableHeuristic;
+    private ArrayList<ArrayList<Integer>> accessPoints;
+    private int[][] accessTable;
 
     Sudoku(int size) {
         constraint = new Constraint();
@@ -173,8 +177,59 @@ class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void setVariableHeuristic() {
+    boolean checkDomainHeuristic() {
+        return domainHeuristic;
+    }
 
+    @Override
+    void setVariableHeuristic() {
+        variableHeuristic=true;
+        setAccessPoints();
+    }
+
+    @Override
+    boolean checkVariableHeuristic() {
+        return variableHeuristic;
+    }
+
+
+    private void setAccessPoints(){
+        accessPoints = new ArrayList<ArrayList<Integer>>();
+        for (int i=0; i<solution.getVariables().length; i++){
+            for (int j=0; i<solution.getVariables().length; j++){
+                ArrayList<Integer> coordinates = new ArrayList<Integer>();
+                coordinates.add(i);
+                coordinates.add(j);
+                accessPoints.add(coordinates);
+            }
+        }
+        Collections.shuffle(accessPoints);
+        createAccessTable();
+    }
+
+    private void createAccessTable(){
+        accessTable = new int[solution.getVariables().length][solution.getVariables().length];
+        for (ArrayList<Integer> point : accessPoints){
+            int index = point.indexOf(point);
+            accessTable[point.get(0)][point.get(1)] = index;
+        }
+    }
+
+    @Override
+    ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
+        if (!variableHeuristic){
+            return solution.getNextPosition(rowNumber, columnNumber);
+        }
+        int index = accessTable[rowNumber][columnNumber];
+        if (index!=accessPoints.size()-1){
+            return accessPoints.get(index+1);
+        }
+        else return null;
+    }
+
+    @Override
+    ArrayList<ArrayList<Integer>> getAccessPoints() {
+        return accessPoints;
     }
 
 

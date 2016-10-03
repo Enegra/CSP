@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public abstract class ConstraintSatisfactionProblem {
 
+
     abstract boolean satisfiesConstraints(int rowNumber, int columnNumber, int number);
 
     abstract ArrayList<Integer> getDomain(int rowNumber, int columnNumber);
@@ -29,5 +30,13 @@ public abstract class ConstraintSatisfactionProblem {
 
     abstract void setDomainHeuristic();
 
+    abstract boolean checkDomainHeuristic();
+
     abstract void setVariableHeuristic();
+
+    abstract boolean checkVariableHeuristic();
+
+    abstract ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber);
+
+    abstract ArrayList<ArrayList<Integer>> getAccessPoints();
 }

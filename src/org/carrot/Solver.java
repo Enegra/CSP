@@ -85,12 +85,25 @@ class Solver {
 
 
     void solve() {
-            if (checkForward(0, 0)) {
-//        if (backtrack(0, 0)) {
+//            if (checkForward(getStartingPosition().get(0), getStartingPosition().get(1))) {
+        if (backtrack(getStartingPosition().get(0), getStartingPosition().get(1))) {
             System.out.println("Problem solved");
         } else {
             System.out.println("No solution available");
         }
+    }
+
+    private ArrayList<Integer>getStartingPosition(){
+        ArrayList<Integer> startPoint = new ArrayList<Integer>();
+        if (!constraintSatisfactionProblem.checkVariableHeuristic()){
+            startPoint.add(0);
+            startPoint.add(0);
+        }
+        else {
+            startPoint.add(constraintSatisfactionProblem.getAccessPoints().get(0).get(0));
+            startPoint.add(constraintSatisfactionProblem.getAccessPoints().get(0).get(1));
+        }
+        return startPoint;
     }
 
     private ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
