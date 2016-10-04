@@ -172,8 +172,8 @@ class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void setDomainHeuristic() {
-        domainHeuristic = true;
+    void setDomainHeuristic(boolean value) {
+        domainHeuristic = value;
     }
 
     @Override
@@ -182,9 +182,11 @@ class Sudoku extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void setVariableHeuristic() {
-        variableHeuristic=true;
-        setAccessPoints();
+    void setVariableHeuristic(boolean value) {
+        variableHeuristic=value;
+        if (variableHeuristic){
+            setAccessPoints();
+        }
     }
 
     @Override
@@ -196,7 +198,7 @@ class Sudoku extends ConstraintSatisfactionProblem {
     private void setAccessPoints(){
         accessPoints = new ArrayList<ArrayList<Integer>>();
         for (int i=0; i<solution.getVariables().length; i++){
-            for (int j=0; i<solution.getVariables().length; j++){
+            for (int j=0; j<solution.getVariables().length; j++){
                 ArrayList<Integer> coordinates = new ArrayList<Integer>();
                 coordinates.add(i);
                 coordinates.add(j);
@@ -209,9 +211,8 @@ class Sudoku extends ConstraintSatisfactionProblem {
 
     private void createAccessTable(){
         accessTable = new int[solution.getVariables().length][solution.getVariables().length];
-        for (ArrayList<Integer> point : accessPoints){
-            int index = point.indexOf(point);
-            accessTable[point.get(0)][point.get(1)] = index;
+        for (int i=0; i<accessPoints.size(); i++){
+            accessTable[accessPoints.get(i).get(0)][accessPoints.get(i).get(1)] = i;
         }
     }
 

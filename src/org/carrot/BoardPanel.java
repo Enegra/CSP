@@ -17,6 +17,7 @@ public class BoardPanel extends JPanel{
     private Font numberFont = new Font("Monospaced", Font.BOLD, 20);
 
     private JTextField[][] sudokuCells;
+    private JTextField[][] queenCells;
 
     BoardPanel(){
         this.setVisible(false);
@@ -49,6 +50,30 @@ public class BoardPanel extends JPanel{
                 sudokuCells[i][j].setFont(numberFont);
                 sudokuCells[i][j].setEditable(false);
                 sudokuCells[i][j].setVisible(true);
+            }
+        }
+        this.setVisible(true);
+    }
+
+    void drawQueens(int[][] array){
+        prepareBoard(array);
+        this.removeAll();
+        queenCells = new JTextField[puzzleSize][puzzleSize];
+        for(int i=0; i<puzzleSize; i++){
+            for (int j=0; j<puzzleSize; j++){
+                queenCells[i][j] = new JTextField();
+                this.add(queenCells[i][j]);
+                if (array[i][j] == 0 || array[i][j] == 2){
+                    queenCells[i][j].setBackground(blankCellColor);
+                }
+                else {
+                    queenCells[i][j].setBackground(cellColor);
+                }
+                queenCells[i][j].setText("");
+                queenCells[i][j].setHorizontalAlignment(JTextField.CENTER);
+                queenCells[i][j].setFont(numberFont);
+                queenCells[i][j].setEditable(false);
+                queenCells[i][j].setVisible(true);
             }
         }
         this.setVisible(true);

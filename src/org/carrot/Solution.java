@@ -96,7 +96,7 @@ class Solution {
 
     int[][] getValues(){
         int[][] values = new int[variables.length][variables.length];
-        for (int i=0; i>variables.length; i++){
+        for (int i=0; i<variables.length; i++){
             for (int j=0; j<variables.length; j++){
                 values[i][j] = variables[i][j].getValue();
             }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 class Solver {
 
     private ConstraintSatisfactionProblem constraintSatisfactionProblem;
+    private boolean forwardChecking = false;
 
     Solver(ConstraintSatisfactionProblem constraintSatisfactionProblem) {
         this.constraintSatisfactionProblem = constraintSatisfactionProblem;
@@ -19,7 +20,7 @@ class Solver {
         }
         ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
         if (!isUnsolvedVariable(rowNumber, columnNumber)) {
-            if (nextPosition!=null){
+            if (nextPosition != null) {
                 return backtrack(nextPosition.get(0), nextPosition.get(1));
             }
         }
@@ -29,6 +30,7 @@ class Solver {
                 continue;
             }
             setValue(rowNumber, columnNumber, number);
+//            System.out.println("ROW: " + rowNumber + " COLUMN: " + columnNumber + " NUMBER: " + number);
             if (nextPosition != null) {
                 if (backtrack(nextPosition.get(0), nextPosition.get(1))) {
                     return true;
@@ -50,8 +52,8 @@ class Solver {
         }
         ArrayList<Integer> nextPosition = getNextPosition(rowNumber, columnNumber);
         if (!isUnsolvedVariable(rowNumber, columnNumber)) {
-            if (nextPosition!=null)
-            return checkForward(nextPosition.get(0), nextPosition.get(1));
+            if (nextPosition != null)
+                return checkForward(nextPosition.get(0), nextPosition.get(1));
         }
         if (!getDomain(rowNumber, columnNumber).isEmpty()) {
             ArrayList<Integer> domain = getDomain(rowNumber, columnNumber);
@@ -80,34 +82,41 @@ class Solver {
                 }
             }
         }
-    return false;
-}
+        return false;
+    }
 
 
     void solve() {
-//            if (checkForward(getStartingPosition().get(0), getStartingPosition().get(1))) {
-        if (backtrack(getStartingPosition().get(0), getStartingPosition().get(1))) {
-            System.out.println("Problem solved");
+        ArrayList<Integer> startingPosition = getStartingPosition();
+        if (forwardChecking) {
+            if (checkForward(startingPosition.get(0), startingPosition.get(1))) {
+                System.out.println("Problem solved");
+            } else {
+                System.out.println("No solution available");
+            }
         } else {
-            System.out.println("No solution available");
+            if (backtrack(startingPosition.get(0), startingPosition.get(1))) {
+                System.out.println("Problem solved");
+            } else {
+                System.out.println("No solution available");
+            }
         }
+
     }
 
-    private ArrayList<Integer>getStartingPosition(){
+    private ArrayList<Integer> getStartingPosition() {
         ArrayList<Integer> startPoint = new ArrayList<Integer>();
-        if (!constraintSatisfactionProblem.checkVariableHeuristic()){
+        if (!constraintSatisfactionProblem.checkVariableHeuristic()) {
             startPoint.add(0);
             startPoint.add(0);
-        }
-        else {
-            startPoint.add(constraintSatisfactionProblem.getAccessPoints().get(0).get(0));
-            startPoint.add(constraintSatisfactionProblem.getAccessPoints().get(0).get(1));
+        } else {
+            startPoint = constraintSatisfactionProblem.getAccessPoints().get(0);
         }
         return startPoint;
     }
 
     private ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
-        return constraintSatisfactionProblem.getSolution().getNextPosition(rowNumber, columnNumber);
+        return constraintSatisfactionProblem.getNextPosition(rowNumber, columnNumber);
     }
 
     private void setValue(int rowNumber, int columnNumber, int value) {
@@ -127,7 +136,7 @@ class Solver {
     }
 
     private ArrayList<Integer> getDomain(int rowNumber, int columnNumber) {
-        return constraintSatisfactionProblem.getDomain(rowNumber,columnNumber);
+        return constraintSatisfactionProblem.getDomain(rowNumber, columnNumber);
     }
 
     private void limitDomain(int number, int rowNumber, int columnNumber) {
@@ -138,5 +147,8 @@ class Solver {
         constraintSatisfactionProblem.resetDomain(rowNumber, columnNumber);
     }
 
+    public void setForwardChecking(boolean value) {
+        forwardChecking = value;
+    }
 
 }

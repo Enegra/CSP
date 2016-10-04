@@ -12,7 +12,7 @@ public class SudokuGenerator {
     private int[][] two = {{3,1,2,4},{2,4,3,1}, {4,2,1,3}, {1,3,4,2}};
     private int[][] three = {{3,4,5,7,1,2,6,9,8},{7,8,2,9,6,3,4,5,1}, {9,6,1,8,5,4,7,2,3},{2,1,9,3,7,5,8,4,6},{6,5,3,2,4,8,1,7,9},{8,7,4,1,9,6,5,3,2},{4,9,6,5,2,1,3,8,7},{1,2,8,4,3,7,9,6,5},{5,3,7,6,8,9,2,1,4}};
 
-    int[][] generate(int size){
+    int[][] generate(int size, int blankCount){
         int[][] sample=new int[size*size][size*size];
         switch (size){
             case 2:
@@ -23,7 +23,6 @@ public class SudokuGenerator {
                 break;
         }
         Random random = new Random();
-        int blankCount = (int)Math.pow(size,4)/2;
         for (int i=blankCount; i>0; i--){
             boolean valid=false;
             int row = random.nextInt(size*size);
@@ -42,6 +41,12 @@ public class SudokuGenerator {
         }
         return sample;
     }
+
+    int[][] generate(int size){
+        int blankCount = (int)Math.pow(size,4)/2;
+        return generate(size, blankCount);
+    }
+
 
     private int[][] permutate(int[][] array){
         Random random = new Random();

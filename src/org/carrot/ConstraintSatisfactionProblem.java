@@ -28,11 +28,11 @@ public abstract class ConstraintSatisfactionProblem {
 
     abstract boolean domainsValid();
 
-    abstract void setDomainHeuristic();
+    abstract void setDomainHeuristic(boolean value);
 
     abstract boolean checkDomainHeuristic();
 
-    abstract void setVariableHeuristic();
+    abstract void setVariableHeuristic(boolean value);
 
     abstract boolean checkVariableHeuristic();
 

@@ -10,10 +10,12 @@ import java.awt.event.ActionListener;
  */
 class OptionPanel extends JPanel {
 
-    private JLabel problemChoiceLabel, heuristicChoiceLabel, problemSizeLabel;
-    private JComboBox problemChoiceComboBox, heuristicChoiceComboBox, problemSizeComboBox;
+    private JLabel problemChoiceLabel, algorithmChoiceLabel, heuristicChoiceLabel, problemSizeLabel;
+    private JComboBox problemChoiceComboBox, algorithmChoiceComboBox, heuristicChoiceComboBox, problemSizeComboBox;
     private JButton setupButton, solveButton;
     UserInterface userInterface;
+    private int problemChoice, problemSize;
+    boolean forwardChecking=false, domainHeuristic=false, variableHeuristic=false;
 
     OptionPanel(UserInterface userInterface) {
         this.userInterface = userInterface;
@@ -25,6 +27,8 @@ class OptionPanel extends JPanel {
         this.setAlignmentX(LEFT_ALIGNMENT);
         setupProblemChoiceLabel();
         setupProblemChoiceComboBox();
+        setupAlgorithmChoiceLabel();
+        setupAlgorithmChoiceComboBox();
         setupHeuristicChoiceLabel();
         setupHeuristicChoiceComboBox();
         setupProblemSizeLabel();
@@ -56,6 +60,8 @@ class OptionPanel extends JPanel {
                 for (int item : problemSize) {
                     problemSizeComboBox.addItem(item);
                 }
+                algorithmChoiceLabel.setVisible(true);
+                algorithmChoiceComboBox.setVisible(true);
                 problemSizeComboBox.setVisible(true);
                 heuristicChoiceLabel.setVisible(true);
                 heuristicChoiceComboBox.setVisible(true);
@@ -98,12 +104,31 @@ class OptionPanel extends JPanel {
         setupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
-                int problemChoice = problemChoiceComboBox.getSelectedIndex();
-                int problemSize = (Integer) problemSizeComboBox.getSelectedItem();
-                int heuristic = heuristicChoiceComboBox.getSelectedIndex();
+                problemChoice = problemChoiceComboBox.getSelectedIndex();
+                problemSize = (Integer) problemSizeComboBox.getSelectedItem();
+                if (algorithmChoiceComboBox.getSelectedIndex()==1){
+                    forwardChecking = true;
+                }
+                switch (heuristicChoiceComboBox.getSelectedIndex()){
+                    case 0:
+                        domainHeuristic = false;
+                        variableHeuristic = false;
+                        break;
+                    case 1:
+                        domainHeuristic = false;
+                        variableHeuristic = true;
+                        break;
+                    case 2:
+                        domainHeuristic = true;
+                        variableHeuristic = false;
+                }
                 //function to run selected algorithm with chosen values
-                userInterface.generateRandomSudokuPuzzle(problemSize);
+                if (problemChoice==0){
+                    userInterface.generateRandomSudokuPuzzle(problemSize);
+                }
+                else {
+                    userInterface.generateQueensPuzzle(problemSize);
+                }
                 solveButton.setVisible(true);
             }
         });
@@ -118,7 +143,12 @@ class OptionPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource()==solveButton){
-                    userInterface.solveSudokuPuzzle();
+                    if (problemChoice==0){
+                        userInterface.solveSudokuPuzzle(forwardChecking, domainHeuristic,variableHeuristic);
+                    }
+                    else {
+                        userInterface.solveQueensPuzzle(forwardChecking, domainHeuristic,variableHeuristic);
+                    }
                 }
             }
         });
@@ -127,5 +157,19 @@ class OptionPanel extends JPanel {
         solveButton.setVisible(false);
     }
 
+    private void setupAlgorithmChoiceLabel() {
+        algorithmChoiceLabel = new JLabel("Choose solving algorithm");
+        this.add(algorithmChoiceLabel);
+        algorithmChoiceLabel.setVisible(false);
+    }
+
+
+    private void setupAlgorithmChoiceComboBox(){
+        String[] algorithms = {"backtracking", "forward checking"};
+        algorithmChoiceComboBox = new JComboBox(algorithms);
+        algorithmChoiceComboBox.setPreferredSize(new Dimension(200,30));
+        this.add(algorithmChoiceComboBox);
+        algorithmChoiceComboBox.setVisible(false);
+    }
 
 }

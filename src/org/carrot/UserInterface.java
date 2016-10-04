@@ -10,7 +10,7 @@ class UserInterface extends JFrame {
     private OptionPanel optionPanel;
     private BoardPanel boardPanel;
     private int optionPanelWidth=200;
-    private int optionPanelHeight=300;
+    private int optionPanelHeight=320;
     private int[][] boardArray;
     private int[][] solvedPuzzle;
 
@@ -33,27 +33,60 @@ class UserInterface extends JFrame {
     void generateRandomSudokuPuzzle(int size){
         SudokuGenerator sudokuGenerator = new SudokuGenerator();
         boardArray = sudokuGenerator.generate(size);
-        displayPuzzle(boardArray);
+        drawSudoku(boardArray);
     }
 
-    void solveSudokuPuzzle(){
+    void solveSudokuPuzzle(boolean forwardChecking, boolean domainHeuristic, boolean variableHeuristic){
         Sudoku sudoku = new Sudoku(boardArray);
-        Solver solver = new Solver(sudoku);
-        solver.solve();
-        solvedPuzzle = new int[boardArray.length][boardArray.length];
-        Variable[][] variables = sudoku.getSolution().getVariables();
-        for (int i=0; i<variables.length; i++){
-            for (int j=0; j<variables[i].length; j++){
-                solvedPuzzle[i][j] = variables[i][j].getValue();
-            }
+        if (domainHeuristic){
+            sudoku.setDomainHeuristic(true);
         }
-        displayPuzzle(solvedPuzzle);
+        if (variableHeuristic){
+            sudoku.setVariableHeuristic(true);
+        }
+        Solver solver = new Solver(sudoku);
+        solver.setForwardChecking(forwardChecking);
+        solver.solve();
+        solvedPuzzle = sudoku.getSolution().getValues();
+        drawSudoku(solvedPuzzle);
         boardPanel.revalidate();
     }
 
-    private void displayPuzzle(int[][] array){
+    void generateQueensPuzzle(int size){
+        QueensProblem queensProblem = new QueensProblem(size);
+        boardArray = queensProblem.getSolution().getValues();
+        drawQueens(boardArray);
+    }
+
+    void solveQueensPuzzle(boolean forwardChecking, boolean domainHeuristic, boolean variableHeuristic){
+        QueensProblem queensProblem = new QueensProblem(boardArray);
+        if (domainHeuristic){
+            queensProblem.setDomainHeuristic(true);
+        }
+        if (variableHeuristic){
+            queensProblem.setVariableHeuristic(true);
+        }
+        Solver solver = new Solver(queensProblem);
+        solver.setForwardChecking(forwardChecking);
+        solver.solve();
+        solvedPuzzle = queensProblem.getSolution().getValues();
+        drawQueens(solvedPuzzle);
+        boardPanel.revalidate();
+    }
+
+    private void drawSudoku(int[][] array){
         boardPanel = new BoardPanel();
         boardPanel.drawSudoku(array);
+        displayPuzzle(array);
+    }
+
+    private void drawQueens(int[][] array){
+        boardPanel = new BoardPanel();
+        boardPanel.drawQueens(array);
+        displayPuzzle(array);
+    }
+
+    private void displayPuzzle(int[][] array){
         int boardSize = boardPanel.getCanvasSize();
         if (optionPanelHeight > boardSize){
             this.setSize(boardSize+optionPanelWidth + 30,optionPanelHeight + 20);

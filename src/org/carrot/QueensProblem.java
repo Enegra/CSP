@@ -12,6 +12,8 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
     private Solution solution;
     private boolean domainHeuristic;
     private boolean variableHeuristic;
+    private ArrayList<ArrayList<Integer>> accessPoints;
+    private int[][] accessTable;
 
     QueensProblem(int size){
         constraint = new Constraint();
@@ -196,32 +198,61 @@ public class QueensProblem extends ConstraintSatisfactionProblem {
     }
 
     @Override
-    void setDomainHeuristic() {
-        domainHeuristic=true;
+    void setDomainHeuristic(boolean value) {
+        domainHeuristic=value;
     }
 
     @Override
     boolean checkDomainHeuristic() {
-        return false;
+        return domainHeuristic;
     }
 
     @Override
-    void setVariableHeuristic() {
-        variableHeuristic=true;
+    void setVariableHeuristic(boolean value) {
+        variableHeuristic=value;
+        setAccessPoints();
     }
 
     @Override
     boolean checkVariableHeuristic() {
-        return false;
+        return variableHeuristic;
+    }
+
+    private void setAccessPoints(){
+        accessPoints = new ArrayList<ArrayList<Integer>>();
+        for (int i=0; i<solution.getVariables().length; i++){
+            for (int j=0; j<solution.getVariables().length; j++){
+                ArrayList<Integer> coordinates = new ArrayList<Integer>();
+                coordinates.add(i);
+                coordinates.add(j);
+                accessPoints.add(coordinates);
+            }
+        }
+        Collections.shuffle(accessPoints);
+        createAccessTable();
+    }
+
+    private void createAccessTable(){
+        accessTable = new int[solution.getVariables().length][solution.getVariables().length];
+        for (int i=0; i<accessPoints.size(); i++){
+            accessTable[accessPoints.get(i).get(0)][accessPoints.get(i).get(1)] = i;
+        }
     }
 
     @Override
     ArrayList<Integer> getNextPosition(int rowNumber, int columnNumber) {
-        return null;
+        if (!variableHeuristic){
+            return solution.getNextPosition(rowNumber, columnNumber);
+        }
+        int index = accessTable[rowNumber][columnNumber];
+        if (index!=accessPoints.size()-1){
+            return accessPoints.get(index+1);
+        }
+        else return null;
     }
 
     @Override
     ArrayList<ArrayList<Integer>> getAccessPoints() {
-        return null;
+        return accessPoints;
     }
 }
